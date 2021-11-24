@@ -3,6 +3,7 @@ Modifications:
 - Added `Makefile`
 - Added `qemu-eos.c`
 - Added a .gitignore
+- Removed old info (doc, HACKING.rst, README.rst, tests)
 
 ## Usage
 ```
