@@ -24,6 +24,10 @@ patch:
 	cd $(DIR); unxz -v sd.img.xz
 	cd $(DIR); cp -v sd.img cf.img
 
+	# Compile qemu-eos CLI program - Inserts the
+	# qemu directory into the program as a constant
+	sudo gcc -DQEMU_DIR='"$(shell cd $(DIR); pwd)"' qemu-eos.c -o /bin/qemu-eos
+
 	# Patch remotely from magiclantern_simplified
 	cd $(PATCH_DIR)/hw/eos/dbi; wget -4 $(CODEBASE_URL)/src/backtrace.c
 	cd $(PATCH_DIR)/hw/eos/dbi; wget -4 $(CODEBASE_URL)/src/backtrace.h
