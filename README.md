@@ -9,8 +9,17 @@ Modifications:
 ```
 # Pull qemu, patch, and compile
 make
-# copy ROM files
-qemu-eos run 1300D
+```
+
+```
+# Mount sd.img:
+qemu-eos mount
+# Press any key to remove the device when you unmount it
+```
+
+```
+# Emulate something
+qemu-eos emu 5D3
 ```
 
 If you would like to install the `qemu-eos` CLI program  
