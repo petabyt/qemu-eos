@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+// To keep linter happy
 #ifndef QEMU_DIR
-	#define QEMU_DIR "~/qemu-eos"
+	#define QEMU_DIR ""
 #endif
 
 // Get DebugMsg_log address
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
 	char cmd[1024];
 	if (!strcmp(argv[1], "emu")) {
 		if (argc < 3) {
-			puts("Usage: ./qemu-eos <ACTION> <MODEL>");
+			puts("Usage: ./qemu-eos emu <MODEL>");
 			return 1;
 		}
 
@@ -51,8 +52,10 @@ int main(int argc, char *argv[]) {
 		findDebug("1300D/debugmsg.gdb", output);
 
 		snprintf(cmd, sizeof(cmd),
-			// Send the debug 
+			// Send the debug address
 			"cd %s; env QEMU_EOS_DEBUGMSG=\"%s\"" \
+
+			// Start qemu patched qemu
 			" qemu-*/arm-softmmu/qemu-system-arm" \
 			" -drive if=sd,format=raw,file=sd.img" \
 			" -drive if=ide,format=raw,file=cf.img" \
