@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	if (!strcmp(argv[1], "emu")) {
 		if (argc < 3) {
 			puts("Usage: ./qemu-eos <ACTION> <MODEL>");
-			return -1;
+			return 1;
 		}
 
 		char output[64];
@@ -65,21 +65,26 @@ int main(int argc, char *argv[]) {
 			argv[2], argv[2]
 		);
 
+		printf("Will execute: %s\n", cmd);
+
 		system(cmd);
 	} else if (!strcmp(argv[1], "mount")) {
-		if (system("which kpartx")) {
-			puts("Can't find kpartx. Try installing util-linux in your package manager.");
-			return -1;
+		snprintf(cmd, sizeof(cmd), "kpartx -av %s/sd.img", QEMU_DIR);
+		if (system(cmd)) {
+			puts("\nFailed to run kpartx, command not found or you're not running as superuser.");
+			puts("If command not found, install 'util-linux' in your package manager.");
+			return 1;
 		}
 
-		puts("Will mount and unmount with sudo.");
-
-		system("sudo kpartx -av sd.img");
-		puts("Do copy files, press enter to unmount.");
+		puts("sd.img mounted. Copy your files, and press enter to unmount.");
 		fgetc(stdin);
-		while (system("sudo kpartx -dv sd.img")) {
+
+		snprintf(cmd, sizeof(cmd), "kpartx -dv %s/sd.img", QEMU_DIR);
+		while (system(cmd)) {
 			puts("Drive is mounted. Please unmount and try again.");
 			fgetc(stdin);
 		}
 	}
+
+	return 0;
 }

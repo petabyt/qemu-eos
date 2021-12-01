@@ -1,11 +1,11 @@
 # Semi replacement for install.sh - 
-# For easier modification
+# Mainly to understand how it works
 
 QEMU_DIR=qemu-eos
 QEMU_NAME=qemu-4.2.1
 DIR=../qemu-eos
 
-all: clean init patch compile
+all: clean init patch qemu-eos compile
 
 init:
 	-@mkdir $(DIR)
@@ -36,9 +36,10 @@ patch:
 	patch -N -p1 --directory=$(PATCH_DIR) < $(QEMU_NAME).patch
 	cp -r eos/* $(PATCH_DIR)/hw/eos
 
+# Compile qemu-eos CLI program - Inserts the
+# qemu directory into the program as a constant
+# (it needs to compile the "../qemu-eos" string)
 qemu-eos:
-	# Compile qemu-eos CLI program - Inserts the
-	# qemu directory into the program as a constant
 	sudo gcc -DQEMU_DIR='"$(shell cd $(DIR); pwd)"' qemu-eos.c -o /bin/qemu-eos
 
 # Compile QEMU
