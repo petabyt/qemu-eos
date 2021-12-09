@@ -32,6 +32,8 @@ int findDebug(char address[], char buffer[]) {
 			}
 		}
 	}
+
+	return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -48,20 +50,27 @@ int main(int argc, char *argv[]) {
 			return 1;
 		}
 
+		char path[64];
+		sprintf(path, "%s/debugmsg.gdb", argv[2]);
+		
 		char output[64];
-		findDebug("1300D/debugmsg.gdb", output);
+		if (findDebug(path, output)) {
+			puts("can't find debugmsg.gdb");
+		}
 
 		snprintf(cmd, sizeof(cmd),
 			// Send the debug address
 			"cd %s; env QEMU_EOS_DEBUGMSG=\"%s\"" \
 
-			// Start qemu patched qemu
+			// Start patched qemu
 			" qemu-*/arm-softmmu/qemu-system-arm" \
 			" -drive if=sd,format=raw,file=sd.img" \
 			" -drive if=ide,format=raw,file=cf.img" \
 			" -chardev socket,server,nowait,path=qemu.monitor$QEMU_JOB_ID,id=monsock" \
 			" -mon chardev=monsock,mode=readline" \
 			" -name %s" \
+
+			// TODO: Allow boot 0
 			" -M %s,firmware=\"boot=1\"",
 			QEMU_DIR,
 			output,
