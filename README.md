@@ -1,9 +1,11 @@
 # Simplified qemu-eos
+Experiments and stuff to understand ML qemu  
+
 Modifications:  
 - Added `Makefile`
 - Added `qemu-eos.c`
-- Added a .gitignore
-- Removed old info (doc, HACKING.rst, README.rst, tests)
+- Added `.gitignore`
+- Removed some info to declutter (doc, HACKING.rst, README.rst, tests)
 
 ## Usage
 ```
@@ -14,16 +16,15 @@ make
 ```
 # Mount sd.img:
 qemu-eos mount
-# Press any key to remove the device when you unmount it
+# Press any key to remove the device once you unmount it
 ```
 
 ```
-# Emulate something
+# Start the emulator
 qemu-eos emu 5D3
 ```
 
-If you would like to install the `qemu-eos` CLI program  
-with an existing installation of QEMU, run this:  
+To install `qemu-eos` into an existing installation:
 ```
 sudo gcc -DQEMU_DIR='"<DIRECTORY OF QEMU-EOS>"' qemu-eos.c -o /bin/qemu-eos
 ```
